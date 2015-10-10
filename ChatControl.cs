@@ -20,8 +20,9 @@ namespace fr34kyn01535.ChatControl
                 return new TranslationList() {
                     { "command_player_not_found", "Player not found"},
                     { "command_mute", "{0} is now muted"},
-                    { "command_unmute", "{0} is now unmuted"},
+                    { "command_unmute", "{0} is now unmuted, his warnings have been reset"},
                     { "kick_ban_reason", "Too many badwords"},
+                    { "you_are_muted", "You are muted, talk to the hand"},
                     { "badword_detected", "{0} is a badword, don't use it or bad things will happen to you. This is your {1}. warning."}
                 };
             }
@@ -43,17 +44,9 @@ namespace fr34kyn01535.ChatControl
                 if (message.ToLower().Contains(badword.ToLower()))
                 {
                     UnturnedChat.Say(player, Translate("badword_detected", badword, ++component.Warnings));
+                    cancel = true;
                     break;
                 }
-            }
-
-            if (!player.HasPermission("ChatControl.IgnoreMute")) {
-                if (component.Warnings >= Configuration.Instance.WarningsBeforeMute)
-                {
-                    component.IsMuted = true;
-                }
-                cancel = component.IsMuted;
-                return;
             }
 
             if (Configuration.Instance.WarningsBeforeKick > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeKick)
@@ -64,6 +57,23 @@ namespace fr34kyn01535.ChatControl
             if (Configuration.Instance.WarningsBeforeBan > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeBan)
             {
                 player.Ban(Translate("kick_ban_reason"), Configuration.Instance.BanDuration);
+                return;
+            }
+
+
+
+            if (!player.HasPermission("ChatControl.IgnoreMute"))
+            {
+                if (component.Warnings >= Configuration.Instance.WarningsBeforeMute)
+                {
+                    component.IsMuted = true;
+                }
+            }
+
+            if (component.IsMuted)
+            {
+                cancel = true;
+                UnturnedChat.Say(player, Translate("you_are_muted"));
                 return;
             }
 

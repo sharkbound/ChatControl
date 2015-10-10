@@ -63,8 +63,9 @@ namespace fr34kyn01535.ChatControl
         {
             UnturnedPlayer player = command.GetUnturnedPlayerParameter(0);
             if (player == null) UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_player_not_found"));
-            ((ChatControlPlayerComponent)player.GetComponent<ChatControlPlayerComponent>()).IsMuted = false;
-
+            ChatControlPlayerComponent component = player.GetComponent<ChatControlPlayerComponent>();
+            component.IsMuted = false;
+            component.Warnings = 0;
 
             if (ChatControl.Instance.Configuration.Instance.AnnounceUnmute)
             {
