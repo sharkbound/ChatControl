@@ -47,14 +47,26 @@ namespace fr34kyn01535.ChatControl
                 }
             }
 
-            if (Configuration.Instance.WarningsBeforeMute > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeMute) component.IsMuted = true;
-            if (Configuration.Instance.WarningsBeforeKick > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeKick) player.Kick(Translate("kick_ban_reason"));
-            if (Configuration.Instance.WarningsBeforeBan > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeBan) player.Ban(Translate("kick_ban_reason"),Configuration.Instance.BanDuration);
+            if (!player.HasPermission("ChatControl.IgnoreMute")) {
+                if (component.Warnings >= Configuration.Instance.WarningsBeforeMute)
+                {
+                    component.IsMuted = true;
+                }
+                cancel = component.IsMuted;
+                return;
+            }
 
+            if (Configuration.Instance.WarningsBeforeKick > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeKick)
+            {
+                player.Kick(Translate("kick_ban_reason"));
+                return;
+            }
+            if (Configuration.Instance.WarningsBeforeBan > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeBan)
+            {
+                player.Ban(Translate("kick_ban_reason"), Configuration.Instance.BanDuration);
+                return;
+            }
 
-
-            if(!player.HasPermission("ChatControl.IgnoreMute"))
-            cancel = component.IsMuted;
         }
 
         protected override void Unload()
