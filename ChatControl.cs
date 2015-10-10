@@ -6,6 +6,7 @@ using System.Text;
 using Rocket.API.Collections;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Events;
+using Rocket.API;
 
 namespace fr34kyn01535.ChatControl
 {
@@ -36,7 +37,8 @@ namespace fr34kyn01535.ChatControl
         {
             ChatControlPlayerComponent component = player.GetComponent<ChatControlPlayerComponent>();
 
-            foreach(string badword in ChatControl.Instance.Configuration.Instance.Badwords)
+            if (!player.HasPermission("ChatControl.IgnoreBadwords"))
+                foreach (string badword in ChatControl.Instance.Configuration.Instance.Badwords)
             {
                 if (message.ToLower().Contains(badword.ToLower()))
                 {
@@ -45,13 +47,13 @@ namespace fr34kyn01535.ChatControl
                 }
             }
 
-            if (component.Warnings >= Configuration.Instance.WarningsBeforeMute) component.IsMuted = true;
-            if (component.Warnings >= Configuration.Instance.WarningsBeforeKick) player.Kick(Translate("kick_ban_reason"));
-            if (component.Warnings >= Configuration.Instance.WarningsBeforeBan) player.Ban(Translate("kick_ban_reason"),Configuration.Instance.BanDuration);
+            if (Configuration.Instance.WarningsBeforeMute > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeMute) component.IsMuted = true;
+            if (Configuration.Instance.WarningsBeforeKick > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeKick) player.Kick(Translate("kick_ban_reason"));
+            if (Configuration.Instance.WarningsBeforeBan > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeBan) player.Ban(Translate("kick_ban_reason"),Configuration.Instance.BanDuration);
 
 
 
-
+            if(!player.HasPermission("ChatControl.IgnoreMute"))
             cancel = component.IsMuted;
         }
 
