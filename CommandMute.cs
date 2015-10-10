@@ -67,11 +67,11 @@ namespace fr34kyn01535.ChatControl
 
             if (ChatControl.Instance.Configuration.Instance.AnnounceMute)
             {
-                UnturnedChat.Say(ChatControl.Instance.Translate("command_mute", player.DisplayName));
+                UnturnedChat.Say(ChatControl.Instance.Translate("command_mute", player.DisplayName),ChatControl.MessageColor);
             }
             else
             {
-                UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_mute", player.DisplayName));
+                UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_mute", player.DisplayName), ChatControl.MessageColor);
             }
 
         }

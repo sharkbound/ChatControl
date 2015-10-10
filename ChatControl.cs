@@ -7,12 +7,15 @@ using Rocket.API.Collections;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Events;
 using Rocket.API;
+using UnityEngine;
+using SDG.Unturned;
 
 namespace fr34kyn01535.ChatControl
 {
     public class ChatControl : RocketPlugin<ChatControlConfiguration>
     {
         public static ChatControl Instance;
+        public static Color MessageColor;
         public override TranslationList DefaultTranslations
         {
             get
@@ -31,6 +34,7 @@ namespace fr34kyn01535.ChatControl
         protected override void Load()
         {
             Instance = this;
+            MessageColor = UnturnedChat.GetColorFromName(Configuration.Instance.MessageColor,Palette.Server);
             UnturnedPlayerEvents.OnPlayerChatted += UnturnedPlayerEvents_OnPlayerChatted;
         }
 
@@ -43,7 +47,7 @@ namespace fr34kyn01535.ChatControl
             {
                 if (message.ToLower().Contains(badword.ToLower()))
                 {
-                    UnturnedChat.Say(player, Translate("badword_detected", badword, ++component.Warnings));
+                        UnturnedChat.Say(player, Translate("badword_detected", badword, ++component.Warnings), MessageColor);
                     cancel = true;
                     break;
                 }
@@ -73,7 +77,7 @@ namespace fr34kyn01535.ChatControl
             if (component.IsMuted)
             {
                 cancel = true;
-                UnturnedChat.Say(player, Translate("you_are_muted"));
+                UnturnedChat.Say(player, Translate("you_are_muted"), MessageColor);
                 return;
             }
 

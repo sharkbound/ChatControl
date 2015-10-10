@@ -62,18 +62,18 @@ namespace fr34kyn01535.ChatControl
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer player = command.GetUnturnedPlayerParameter(0);
-            if (player == null) UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_player_not_found"));
+            if (player == null) UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_player_not_found"), ChatControl.MessageColor);
             ChatControlPlayerComponent component = player.GetComponent<ChatControlPlayerComponent>();
             component.IsMuted = false;
             component.Warnings = 0;
 
             if (ChatControl.Instance.Configuration.Instance.AnnounceUnmute)
             {
-                UnturnedChat.Say(ChatControl.Instance.Translate("command_unmute", player.DisplayName));
+                UnturnedChat.Say(ChatControl.Instance.Translate("command_unmute", player.DisplayName), ChatControl.MessageColor);
             }
             else
             {
-                UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_unmute", player.DisplayName));
+                UnturnedChat.Say(caller, ChatControl.Instance.Translate("command_unmute", player.DisplayName), ChatControl.MessageColor);
             }
         }
     }

@@ -19,6 +19,8 @@ namespace fr34kyn01535.ChatControl
 
         public uint BanDuration;
 
+        public string MessageColor;
+
         public void LoadDefaults()
         {
             AnnounceMute = true;
@@ -31,6 +33,8 @@ namespace fr34kyn01535.ChatControl
             WarningsBeforeBan = -1;
 
             BanDuration = 3600;
+
+            MessageColor = "Yellow";
         }
     }
 }
