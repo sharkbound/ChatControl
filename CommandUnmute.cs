@@ -19,11 +19,11 @@ namespace fr34kyn01535.ChatControl
             }
         }
 
-        public bool AllowFromConsole
+        public AllowedCaller AllowedCaller
         {
             get
             {
-                return true;
+                return AllowedCaller.Both;
             }
         }
 
