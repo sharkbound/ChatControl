@@ -34,7 +34,7 @@ namespace fr34kyn01535.ChatControl
         protected override void Load()
         {
             Instance = this;
-            MessageColor = UnturnedChat.GetColorFromName(Configuration.Instance.MessageColor,Palette.Server);
+            MessageColor = UnturnedChat.GetColorFromName(Configuration.Instance.MessageColor,Palette.SERVER);
             UnturnedPlayerEvents.OnPlayerChatted += UnturnedPlayerEvents_OnPlayerChatted;
         }
 
