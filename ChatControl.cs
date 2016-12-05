@@ -43,7 +43,7 @@ namespace fr34kyn01535.ChatControl
         {
             ChatControlPlayerComponent component = player.GetComponent<ChatControlPlayerComponent>();
 
-            if (!player.HasPermission("ChatControl.IgnoreBadwords"))
+            if (!player.HasPermission("ChatControl.IgnoreBadwords") && message.ToCharArray()[0] != '/' && chatMode != EChatMode.GROUP)
             {
                 foreach (string badword in ChatControl.Instance.Configuration.Instance.Badwords)
                 {
