@@ -26,7 +26,8 @@ namespace fr34kyn01535.ChatControl
                     { "command_unmute", "{0} is now unmuted, his warnings have been reset"},
                     { "kick_ban_reason", "Too many badwords"},
                     { "you_are_muted", "You are muted, talk to the hand"},
-                    { "badword_detected", "{0} is a badword, don't use it or bad things will happen to you. This is your {1}. warning."}
+                    { "badword_detected", "{0} is a badword, don't use it or bad things will happen to you. This is your {1}. warning."},
+                    { "command", "warn \"{0}\" \"Swearing\""},
                 };
             }
         }
@@ -34,7 +35,7 @@ namespace fr34kyn01535.ChatControl
         protected override void Load()
         {
             Instance = this;
-            MessageColor = UnturnedChat.GetColorFromName(Configuration.Instance.MessageColor,Palette.SERVER);
+            MessageColor = UnturnedChat.GetColorFromName(Configuration.Instance.MessageColor, Palette.SERVER);
             UnturnedPlayerEvents.OnPlayerChatted += UnturnedPlayerEvents_OnPlayerChatted;
         }
 
@@ -43,34 +44,16 @@ namespace fr34kyn01535.ChatControl
             ChatControlPlayerComponent component = player.GetComponent<ChatControlPlayerComponent>();
 
             if (!player.HasPermission("ChatControl.IgnoreBadwords"))
+            {
                 foreach (string badword in ChatControl.Instance.Configuration.Instance.Badwords)
-            {
-                if (message.ToLower().Contains(badword.ToLower()))
                 {
-                        UnturnedChat.Say(player, Translate("badword_detected", badword, ++component.Warnings), MessageColor);
-                    cancel = true;
-                    break;
-                }
-            }
-
-            if (Configuration.Instance.WarningsBeforeKick > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeKick)
-            {
-                player.Kick(Translate("kick_ban_reason"));
-                return;
-            }
-            if (Configuration.Instance.WarningsBeforeBan > 0 && component.Warnings >= Configuration.Instance.WarningsBeforeBan)
-            {
-                player.Ban(Translate("kick_ban_reason"), Configuration.Instance.BanDuration);
-                return;
-            }
-
-
-
-            if (!player.HasPermission("ChatControl.IgnoreMute"))
-            {
-                if (component.Warnings >= Configuration.Instance.WarningsBeforeMute)
-                {
-                    component.IsMuted = true;
+                    if (message.ToLower().Contains(badword.ToLower()))
+                    {
+                        //UnturnedChat.Say(player, Translate("badword_detected", badword, ++component.Warnings), MessageColor);
+                        CommandWindow.input.onInputText(Translate("command", player.DisplayName));
+                        cancel = true;
+                        break;
+                    }
                 }
             }
 
