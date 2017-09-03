@@ -9,6 +9,7 @@ using Rocket.Unturned.Events;
 using Rocket.API;
 using UnityEngine;
 using SDG.Unturned;
+using Rocket.Unturned.Player;
 
 namespace fr34kyn01535.ChatControl
 {
@@ -39,18 +40,18 @@ namespace fr34kyn01535.ChatControl
             UnturnedPlayerEvents.OnPlayerChatted += UnturnedPlayerEvents_OnPlayerChatted;
         }
 
-        private void UnturnedPlayerEvents_OnPlayerChatted(Rocket.Unturned.Player.UnturnedPlayer player, ref UnityEngine.Color color, string message, SDG.Unturned.EChatMode chatMode, ref bool cancel)
+        private void UnturnedPlayerEvents_OnPlayerChatted(UnturnedPlayer player, ref Color color, string message, EChatMode chatMode, ref bool cancel)
         {
             ChatControlPlayerComponent component = player.GetComponent<ChatControlPlayerComponent>();
 
             if (!player.HasPermission("ChatControl.IgnoreBadwords") && message.ToCharArray()[0] != '/' && chatMode != EChatMode.GROUP)
             {
-                foreach (string badword in ChatControl.Instance.Configuration.Instance.Badwords)
+                foreach (string badword in Instance.Configuration.Instance.Badwords)
                 {
                     if (message.ToLower().Contains(badword.ToLower()))
                     {
                         //UnturnedChat.Say(player, Translate("badword_detected", badword, ++component.Warnings), MessageColor);
-                        CommandWindow.input.onInputText(Translate("command", player.DisplayName));
+                        CommandWindow.input.onInputText(Translate("command", player.Id));
                         cancel = true;
                         break;
                     }
